@@ -47,10 +47,12 @@ public class ChannelApiTest {
             result.getResponse().getContentAsString(),
             false));
 
-    var actualDataSet = databaseTester.getDataSet();
+    var actualDataSet = databaseTester.getConnection().createDataSet();
+    var actualChannelsTable = actualDataSet.getTable("channels");
     var expectedUri = this.getClass().getResource("/channel/create/" + dbPath + "/expected/");
     var expectedDataSet = new CsvURLDataSet(expectedUri);
-    Assertion.assertEquals(expectedDataSet, actualDataSet);
+    var expectedChannelsTable = expectedDataSet.getTable("channels");
+    Assertion.assertEquals(expectedChannelsTable, actualChannelsTable);
   }
 
   private static Stream<Arguments> createTestProvider() {
@@ -101,10 +103,12 @@ public class ChannelApiTest {
             result.getResponse().getContentAsString(),
             false));
 
-    var actualDataSet = databaseTester.getDataSet();
-    var expectedUri = this.getClass().getResource("/channel/findAll/" + dbPath + "/given/");
+    var actualDataSet = databaseTester.getConnection().createDataSet();
+    var actualChannelsTable = actualDataSet.getTable("channels");
+    var expectedUri = this.getClass().getResource("/channel/findAll/" + dbPath + "/given/"); // givenを想定結果として利用
     var expectedDataSet = new CsvURLDataSet(expectedUri);
-    Assertion.assertEquals(expectedDataSet, actualDataSet);
+    var expectedChannelsTable = expectedDataSet.getTable("channels");
+    Assertion.assertEquals(expectedChannelsTable, actualChannelsTable);
   }
 
   private static Stream<Arguments> findAllTestProvider() {
@@ -121,8 +125,7 @@ public class ChannelApiTest {
                   "name": "2つ目のチャンネル"
                 }
               ]
-            """, "multi-record")
-    );
+            """, "multi-record"));
   }
 
 }
