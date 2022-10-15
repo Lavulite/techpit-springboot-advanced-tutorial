@@ -10,6 +10,10 @@ import com.lavulite.techpit.chat.chatbackend.domain.channels.model.Channel;
 @Mapper
 public interface ChannelMapper {
   void insert(Channel channel);
+  
   List<Channel> findAll();
+  
   Optional<Integer> getMaxId();
+
+  int update(Channel channel);
 }

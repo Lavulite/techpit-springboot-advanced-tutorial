@@ -1,6 +1,5 @@
 package com.lavulite.techpit.chat.chatbackend.app.service;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,5 +23,9 @@ public class ChannelService {
 
   public List<Channel> findAll(){
     return channelDomainService.findAll();
+  }
+
+  public Channel updade(Channel channel){
+    return channelDomainService.update(channel);
   }
 }

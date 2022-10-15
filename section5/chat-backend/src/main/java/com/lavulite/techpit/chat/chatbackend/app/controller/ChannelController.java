@@ -1,11 +1,11 @@
 package com.lavulite.techpit.chat.chatbackend.app.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +31,10 @@ public class ChannelController {
   @GetMapping()
   public List<Channel> findAll(){
     return channelService.findAll();
+  }
+
+  @PutMapping()
+  public Channel updade(@RequestBody Channel channel){
+    return channelService.updade(channel);
   }
 }
