@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lavulite.techpit.chat.chatbackend.infrastructure.channels.ChannelMapper">
+  <insert id="insert" parameterType="com.lavulite.techpit.chat.chatbackend.domain.channels.model.Channel">
+    INSERT INTO channels
+      (id, name)
+    VALUES
+      (#{id}, #{name})
+  </insert>
+
+  <select id="findAll" resultType="com.lavulite.techpit.chat.chatbackend.domain.channels.model.Channel">
+    SELECT * FROM channels
+  </select>
+  
+  <select id="getMaxId" resultType="int">
+    SELECT MAX(id) AS max_id FROM channels
+  </select>
+</mapper>
