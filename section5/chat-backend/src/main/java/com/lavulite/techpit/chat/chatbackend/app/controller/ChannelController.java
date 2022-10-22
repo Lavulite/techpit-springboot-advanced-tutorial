@@ -3,6 +3,7 @@ package com.lavulite.techpit.chat.chatbackend.app.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,8 +34,9 @@ public class ChannelController {
     return channelService.findAll();
   }
 
-  @PutMapping()
-  public Channel updade(@RequestBody Channel channel){
+  @PutMapping("/{id}")
+  public Channel updade(@PathVariable("id") int id, @RequestBody Channel channel){
+    channel.setId(id);
     return channelService.updade(channel);
   }
 }

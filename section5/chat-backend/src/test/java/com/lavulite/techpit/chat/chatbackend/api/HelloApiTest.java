@@ -46,10 +46,12 @@ public class HelloApiTest {
             result.getResponse().getContentAsString(),
             false));
 
-    var actualDataSet = databaseTester.getDataSet();
-    URL expectedUrl = this.getClass().getResource("/hello/hello/" + dbPath + "/expected/");
+    var actualDataSet = databaseTester.getConnection().createDataSet();
+    var actualTestTable = actualDataSet.getTable("test");
+    var expectedUrl = this.getClass().getResource("/hello/hello/" + dbPath + "/expected/");
     var expectedDataSet = new CsvURLDataSet(expectedUrl);
-    Assertion.assertEquals(expectedDataSet, actualDataSet);
+    var expectedTestTable = expectedDataSet.getTable("test");
+    Assertion.assertEquals(expectedTestTable, actualTestTable);
   }
 
   private static Stream<Arguments> helloTestProvider() {

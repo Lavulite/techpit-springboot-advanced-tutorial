@@ -18,6 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ChannelApiTest {
@@ -130,20 +133,25 @@ public class ChannelApiTest {
 
   @ParameterizedTest
   @MethodSource("updateTestProvider")
-  public void updateTest(String requestBody, String dbPath) throws Exception {
+  public void updateTest(int id, String requestBody, String dbPath) throws Exception {
     IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
     var givenUrl = this.getClass().getResource("/channels/update/" + dbPath + "/given/");
     databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
     databaseTester.onSetup();
 
+    var expectedBodyMapper = new ObjectMapper();
+    var expectedNode = expectedBodyMapper.readTree(requestBody);
+    ((ObjectNode) expectedNode).put("id", 1);
+    var expectedBody = expectedNode.toString();
+
     mockMvc.perform(
-        MockMvcRequestBuilders.put("/channels")
+        MockMvcRequestBuilders.put("/channels/" + id)
             .content(requestBody)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect((result) -> JSONAssert.assertEquals(
-            requestBody,
+            expectedBody,
             result.getResponse().getContentAsString(),
             false));
 
@@ -158,9 +166,9 @@ public class ChannelApiTest {
   private static Stream<Arguments> updateTestProvider() {
     return Stream.of(
         Arguments.arguments(
+            1,
             """
                 {
-                  "id": 1,
                   "name": "更新後のチャンネル"
                 }
                 """,

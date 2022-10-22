@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.lavulite.techpit.chat.chatbackend.domain.channels.model.Channel;
 
 @SpringBootTest
 @AutoConfigureMockMvc
