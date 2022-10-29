@@ -38,14 +38,14 @@ public class MessageApiTest {
 
   @ParameterizedTest
   @MethodSource("postTestProvider")
-  public void postTest(String requestBody, String expectedBody, String dbPath) throws Exception {
+  public void postTest(int channelId, String requestBody, String expectedBody, String dbPath) throws Exception {
     IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
     var givenUrl = this.getClass().getResource("/messages/post/" + dbPath + "/given/");
     databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
     databaseTester.onSetup();
 
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/messages") // postメソッドを利用
+        MockMvcRequestBuilders.post("/channels/" + channelId + "/messages") // postメソッドを利用
             .content(requestBody) // contentでリクエストボディを設定する
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -89,9 +89,9 @@ public class MessageApiTest {
   private static Stream<Arguments> postTestProvider() {
     return Stream.of(
       Arguments.arguments(
+          1,
           """
               {
-                "channelId": 1,
                 "text": "APIリクエストしたメッセージ"
               }
               """,
