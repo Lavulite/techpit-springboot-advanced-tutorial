@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import com.lavulite.techpit.chat.chatbackend.domain.messages.model.Message;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/channels/{channelId}/messages")
 @RequiredArgsConstructor
 @CrossOrigin
 public class MessageController {
@@ -25,13 +26,14 @@ public class MessageController {
   private final MessageService messageService;
 
   @PostMapping
-  public Message post(@RequestBody Message message) {
+  public Message post(@PathVariable int channelId, @RequestBody Message message) {
+    message.setChannelId(channelId);
     return messageService.post(message);
   }
 
   @GetMapping
   public List<Message> find(
-      @RequestParam("channelId") int channelId,
+      @PathVariable("channelId") int channelId,
       @RequestParam("searchWord") Optional<String> searchWord) {
     return messageService.find(channelId, searchWord);
   }

@@ -41,16 +41,17 @@ public class MessageApiTest {
   @Autowired
   private DataSource dataSource;
 
+
   @ParameterizedTest
   @MethodSource("postTestProvider")
-  public void postTest(String requestBody, String expectedBody, String dbPath) throws Exception {
+  public void postTest(int channelId, String requestBody, String expectedBody, String dbPath) throws Exception {
     IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
     var givenUrl = this.getClass().getResource("/messages/post/" + dbPath + "/given/");
     databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
     databaseTester.onSetup();
 
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/messages") // postメソッドを利用
+        MockMvcRequestBuilders.post("/channels/" + channelId + "/messages") // postメソッドを利用
             .content(requestBody) // contentでリクエストボディを設定する
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -68,48 +69,48 @@ public class MessageApiTest {
                 new Customization("timestamp", (o1, o2) -> true))));
 
     // 比較時のソートに使用するカラムを指定する。
-    String[] sortBy = { "channel_id", "username", "text" };
+    String[] sortBy = {"channel_id", "username", "text"};
     // 比較対象外にするカラムを指定する。
-    String[] excludeColumns = { "id", "timestamp" };
+    String[] excludeColumns = {"id", "timestamp"}; 
 
     var actualDataSet = databaseTester.getConnection().createDataSet();
     // 比較対象外のカラムを除外後、ソートする。
     var actualMessagesTable = new SortedTable(
-        DefaultColumnFilter.excludedColumnsTable(
-            actualDataSet.getTable("messages"),
-            excludeColumns),
-        sortBy);
-
+      DefaultColumnFilter.excludedColumnsTable(
+        actualDataSet.getTable("messages"), 
+        excludeColumns
+        ), sortBy);
+        
     var expectedUri = this.getClass().getResource("/messages/post/" + dbPath + "/expected/");
     var expectedDataSet = new CsvURLDataSet(expectedUri);
     // 比較対象外のカラムを除外後、ソートする。
     var expectedMessagesTable = new SortedTable(
-        DefaultColumnFilter.excludedColumnsTable(
-            expectedDataSet.getTable("messages"),
-            excludeColumns),
-        sortBy);
+      DefaultColumnFilter.excludedColumnsTable(
+        expectedDataSet.getTable("messages"), 
+        excludeColumns
+      ), sortBy);
     Assertion.assertEquals(expectedMessagesTable, actualMessagesTable);
   }
 
   private static Stream<Arguments> postTestProvider() {
     return Stream.of(
-        Arguments.arguments(
-            """
-                {
-                  "channelId": 1,
-                  "text": "APIリクエストしたメッセージ"
-                }
+      Arguments.arguments(
+          1,
+          """
+              {
+                "text": "APIリクエストしたメッセージ"
+              }
+              """,
+          """
+              {
+                "id": "202210151201-8097c0d2-ddc7-f02a-9dbf-29dfcd646d2b",
+                "channelId": 1,
+                "text": "APIリクエストしたメッセージ",
+                "username": "guest",
+                "timestamp": "2022-10-15 12:01:00"
+              }
                 """,
-            """
-                {
-                  "id": "202210151201-8097c0d2-ddc7-f02a-9dbf-29dfcd646d2b",
-                  "channelId": 1,
-                  "text": "APIリクエストしたメッセージ",
-                  "username": "guest",
-                  "timestamp": "2022-10-15 12:01:00"
-                }
-                  """,
-            "success"));
+          "success"));
   }
 
   @ParameterizedTest
@@ -123,12 +124,11 @@ public class MessageApiTest {
 
     // クエリストリングの作成
     MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-    params.add("channelId", String.valueOf(channelId));
     // 検索条件のメッセージ本文があればクエリストリングに追加
     searchWord.ifPresent(w -> params.add("searchWord", w));
 
     mockMvc.perform(
-        MockMvcRequestBuilders.get("/messages") // getメソッドを利用
+        MockMvcRequestBuilders.get("/channels/" + channelId + "/messages") // getメソッドを利用
             .params(params) // クエリストリングをセット
             .accept(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(MockMvcResultMatchers.status().isOk())
