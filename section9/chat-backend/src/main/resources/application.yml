@@ -13,3 +13,8 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     default-statement-timeout: 30
+jwt:
+  public:
+    key: classpath:app.key.pub
+  private:
+    key: classpath:app.key

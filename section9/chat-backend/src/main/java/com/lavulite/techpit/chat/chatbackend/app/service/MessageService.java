@@ -3,6 +3,7 @@ package com.lavulite.techpit.chat.chatbackend.app.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,7 @@ public class MessageService {
   private final MessageDomainService messageDomainService;
 
   public Message post(Message message){
-    // TODO: 8章で認証情報から取得するように修正する。
-    var username = "guest";
+    var username = SecurityContextHolder.getContext().getAuthentication().getName();
     message.setUsername(username);
     return messageDomainService.post(message);
   }
