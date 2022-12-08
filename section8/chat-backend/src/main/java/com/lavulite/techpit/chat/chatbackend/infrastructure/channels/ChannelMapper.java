@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.lavulite.techpit.chat.chatbackend.domain.channels.model.Channel;
 
@@ -18,5 +17,5 @@ public interface ChannelMapper {
 
   int update(Channel channel);
 
-  int delete(@Param("id") int id);
+  int delete(int id);
 }

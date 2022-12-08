@@ -18,5 +18,5 @@ public interface ChannelMapper {
 
   int update(Channel channel);
 
-  int delete(@Param("id") int id);
+  int delete(int id);
 }
