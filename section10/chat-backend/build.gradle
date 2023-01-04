@@ -19,6 +19,11 @@ repositories {
 }
 
 dependencies {
+	implementation 'com.bucket4j:bucket4j-core:8.1.1'
+	
+	implementation 'org.springframework.retry:spring-retry:2.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-aop:2.7.1'
+
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.7.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:2.7.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:2.7.1'

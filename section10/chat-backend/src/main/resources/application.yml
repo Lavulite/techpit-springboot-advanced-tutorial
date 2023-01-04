@@ -8,6 +8,8 @@ spring:
     url: jdbc:h2:mem:testdb;MODE=MySQL
     username: sa
     password:
+  transaction:
+    default-timeout: 5
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
   configuration:
