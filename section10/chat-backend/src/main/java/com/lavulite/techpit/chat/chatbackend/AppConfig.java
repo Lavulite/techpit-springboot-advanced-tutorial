@@ -50,20 +50,8 @@ public class AppConfig {
   RSAPrivateKey priv;
 
   @Bean
-  DataSource dataSource() {
-    return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-        .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION).build();
-  }
-
-  @Bean
   UserDetailsManager users(DataSource dataSource) {
-    UserDetails user = User.builder()
-        .username("user")
-        .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-        .roles("USER")
-        .build();
     var users = new JdbcUserDetailsManager(dataSource);
-    users.createUser(user);
     return users;
   }
 

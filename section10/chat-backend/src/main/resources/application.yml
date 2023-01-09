@@ -4,10 +4,10 @@ server:
     context-path: /chat-backend
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/chat
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:my-secret-pw}
   transaction:
     default-timeout: 5
 mybatis:
