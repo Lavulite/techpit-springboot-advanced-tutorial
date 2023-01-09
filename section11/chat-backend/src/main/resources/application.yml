@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /chat-backend
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/chat
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASS:my-secret-pw}
+  transaction:
+    default-timeout: 5
+mybatis:
+  mapper-locations: classpath*:mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-statement-timeout: 30
+jwt:
+  public:
+    key: classpath:app.key.pub
+  private:
+    key: classpath:app.key
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG

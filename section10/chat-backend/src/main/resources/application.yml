@@ -8,8 +8,6 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/chat
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:my-secret-pw}
-  transaction:
-    default-timeout: 5
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
   configuration:
@@ -20,10 +18,3 @@ jwt:
     key: classpath:app.key.pub
   private:
     key: classpath:app.key
-logging:
-  level:
-    org:
-      springframework:
-        web:
-          filter:
-            CommonsRequestLoggingFilter: DEBUG
