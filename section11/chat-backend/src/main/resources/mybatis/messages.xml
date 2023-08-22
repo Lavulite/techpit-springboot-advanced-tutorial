@@ -10,8 +10,7 @@
 
   <select id="find" resultType="com.lavulite.techpit.chat.chatbackend.domain.messages.model.Message">
     SELECT * FROM messages
-    WHERE 1 = 1
-    AND channel_id = #{channelId}
+    WHERE channel_id = #{channelId}
     <if test="searchWord.isPresent()">
       <bind name="word" value="searchWord.get()" />
       AND text LIKE '%' || #{word} || '%'
